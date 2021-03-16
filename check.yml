@@ -1,0 +1,9 @@
+---
+- name: This is a dummy yaml file
+  hosts: "ansibleworker"
+
+  tasks:
+  - name: Creating a user
+    user:
+      name: yogeshraheja
+      state: present
