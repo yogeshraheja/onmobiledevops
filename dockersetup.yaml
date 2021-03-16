@@ -1,0 +1,54 @@
+---
+- name: This playbook is for Docker Setup on CentOS and Dummy Testing of a container
+  hosts: "ansibleworker"
+
+  tasks:
+  - name: Remove the packages which are not required
+    yum:
+      name: 
+        - docker
+        - docker-client
+        - docker-client-latest
+        - docker-common
+        - docker-latest
+        - docker-latest-logrotate
+        - docker-logrotate
+        - docker-engine
+      state: absent
+
+  - name: Installing Docker Pre-Req package
+    yum: 
+      name: yum-utils
+      state: present
+
+  - name: Adding a Docker Repository
+    get_url:
+      dest: /etc/yum.repos.d/docker-ce.repo
+      url: https://download.docker.com/linux/centos/docker-ce.repo
+
+  - name: Installing DOcker Packages
+    yum:
+      name: 
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+      state: present
+
+  - name: Starting Docker Daemon
+    service:
+      name: docker
+      state: started
+
+  - name: Checking Installed Docker Version
+    command: "docker --version"
+    register: dockeroutput
+
+  - name: Displaying Docker Version output
+    debug: var=dockeroutput
+
+  - name: Testing a container
+    command: "docker run -itd --name yogeshcon -p 82:80 httpd:2"
+    register: dockeroutputagain
+
+  - name: Listing the containers
+    debug: var=dockeroutputagain
