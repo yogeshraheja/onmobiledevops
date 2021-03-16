@@ -46,6 +46,12 @@
   - name: Displaying Docker Version output
     debug: var=dockeroutput
 
+  - name: Stopping container
+    command: "docker stop yogeshcon"
+
+  - name: Removing containers
+    command: "docker rm yogeshcon"
+
   - name: Testing a container
     command: "docker run -itd --name yogeshcon -p 82:80 httpd:2"
     register: dockeroutputagain
